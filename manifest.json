@@ -1,0 +1,14 @@
+{
+  "name": "纯净学习站",
+  "short_name": "学习站",
+  "description": "幼儿纯净版学习站：拼音、识字、唐诗、数学、儿歌、英语启蒙、英文动画，家长可自定义资源",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#F0F7FF",
+  "theme_color": "#3F8AE0",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
