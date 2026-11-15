@@ -69,6 +69,59 @@ body { background:#F0F7FF; overflow:hidden; }
 .poem h3 { font-size:22px; color:#31465A; }
 .poem .author { font-size:14px; color:#9AAFC2; margin:6px 0 14px; }
 .poem p { font-size:20px; line-height:1.9; color:#4A6178; }
+
+/* ===== 唐诗列表卡片（一诗一页入口） ===== */
+.plist { display:flex; flex-direction:column; gap:14px; }
+.plist .pitem { display:flex; align-items:center; background:#fff; border-radius:22px; padding:18px 20px; cursor:pointer; box-shadow:0 4px 14px rgba(50,80,120,.08); transition:transform .15s; }
+.plist .pitem:active { transform:scale(.97); }
+.plist .pico { width:56px; height:56px; border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:30px; margin-right:16px; flex-shrink:0; }
+.plist .pinfo { flex:1; }
+.plist .pinfo h3 { font-size:21px; color:#31465A; margin:0 0 4px; }
+.plist .pinfo .author { font-size:13px; color:#9AAFC2; }
+.plist .parrow { font-size:20px; color:#C4D2E0; }
+
+/* ===== 唐诗详情页（一诗一页 + 动画场景） ===== */
+.pscene { position:relative; border-radius:24px; overflow:hidden; min-height:340px; margin-bottom:16px; }
+.pscene .layer { position:absolute; pointer-events:none; }
+.pscene .ptitlebar { position:absolute; top:14px; left:0; right:0; text-align:center; z-index:5; }
+.pscene .ptitlebar h2 { font-size:26px; color:#31465A; margin:0; text-shadow:0 1px 4px rgba(255,255,255,.7); }
+.pscene .ptitlebar .pauthor { font-size:14px; color:#6B85A0; margin-top:4px; }
+.pscene .night .ptitlebar h2 { color:#F5EFD9; text-shadow:0 1px 6px rgba(0,0,0,.4); }
+.pscene .night .ptitlebar .pauthor { color:#C9D4EA; }
+.pplay { position:absolute; right:14px; bottom:12px; z-index:6; border:none; background:rgba(255,255,255,.9); border-radius:50%; width:52px; height:52px; font-size:24px; cursor:pointer; box-shadow:0 4px 10px rgba(0,0,0,.15); }
+.pplay:active { transform:scale(.9); }
+.pscene .ground { position:absolute; left:0; right:0; bottom:0; height:22%; z-index:1; }
+
+/* 诗句面板 */
+.ppanel { background:#fff; border-radius:24px; padding:22px 24px; margin-bottom:16px; }
+.ppanel .pline { font-size:23px; line-height:2; color:#4A6178; padding:6px 12px; border-radius:14px; transition:background .3s, color .3s, transform .3s; }
+.ppanel .pline.on { background:#FFF3D6; color:#B8860B; font-weight:700; transform:scale(1.03); }
+.pbtns2 { display:flex; gap:12px; margin-top:14px; }
+.pbtns2 .btn { flex:1; padding:14px 10px; font-size:17px; }
+
+/* ===== 场景动画 ===== */
+@keyframes animFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+@keyframes animSway { 0%,100%{transform:rotate(-6deg)} 50%{transform:rotate(6deg)} }
+@keyframes animDrift { 0%{transform:translateX(0)} 50%{transform:translateX(28px)} 100%{transform:translateX(0)} }
+@keyframes animFall { 0%{transform:translateY(-10px) rotate(0);opacity:.9} 100%{transform:translateY(260px) rotate(360deg);opacity:.15} }
+@keyframes animTwinkle { 0%,100%{opacity:.25;transform:scale(.85)} 50%{opacity:1;transform:scale(1.15)} }
+@keyframes animGlow { 0%,100%{filter:drop-shadow(0 0 6px rgba(255,220,120,.6))} 50%{filter:drop-shadow(0 0 22px rgba(255,220,120,.95))} }
+@keyframes animWave { 0%,100%{transform:translateX(0)} 50%{transform:translateX(-18px)} }
+@keyframes animRise { 0%{transform:translateY(0)} 50%{transform:translateY(-70px);opacity:.95} 100%{transform:translateY(0)} }
+@keyframes animPulse { 0%{transform:scale(1)} 40%{transform:scale(1.45)} 100%{transform:scale(1)} }
+.a-float { animation:animFloat 3.2s ease-in-out infinite; }
+.a-sway { animation:animSway 2.8s ease-in-out infinite; transform-origin:bottom center; }
+.a-drift { animation:animDrift 4.5s ease-in-out infinite; }
+.a-fall { animation:animFall 5s linear infinite; }
+.a-twinkle { animation:animTwinkle 1.8s ease-in-out infinite; }
+.a-glow { animation:animGlow 3s ease-in-out infinite; }
+.a-wave { animation:animWave 3.5s ease-in-out infinite; }
+.a-rise { animation:animRise 6s ease-in-out infinite; }
+.layer.pulse { animation:animPulse .9s ease-in-out 1 !important; }
+.ground-grass { background:linear-gradient(#BCE29E,#8FCB72); border-radius:50% 50% 0 0; }
+.ground-water { background:linear-gradient(#A8DDF0,#7BC4E8); border-radius:0 0 40% 40% / 0 0 60% 60%; }
+.ground-sand { background:linear-gradient(#F2D9A0,#E5C27B); }
+.ground-snow { background:linear-gradient(#EAF3FB,#D4E6F5); }
 .mathbox { text-align:center; max-width:420px; margin:0 auto; }
 .mathq { font-size:56px; font-weight:700; color:#31465A; background:#fff; border-radius:24px; padding:34px 0; box-shadow:0 4px 18px rgba(63,138,224,.08); }
 .opts { display:flex; gap:14px; justify-content:center; margin-top:24px; flex-wrap:wrap; }
@@ -172,6 +225,10 @@ body { background:#F0F7FF; overflow:hidden; }
   <div class="view" id="v-poems">
     <div class="vhead"><div class="vt">📜 读唐诗</div></div>
     <div class="vbody" id="poemList"></div>
+  </div>
+
+  <div class="view" id="v-poem">
+    <div class="vbody" id="poemDetail"></div>
   </div>
 
   <div class="view" id="v-math">
@@ -371,6 +428,74 @@ const DEF_POEMS = [
   {t:"古朗月行（节选）",a:"唐 · 李白",b:["小时不识月，","呼作白玉盘。","又疑瑶台镜，","飞在青云端。"]},
   {t:"画",a:"唐 · 王维（传，一说宋人作）",b:["远看山有色，","近听水无声。","春去花还在，","人来鸟不惊。"]}
 ];
+/* 每首诗的专属动画场景：bg 背景渐变 / ground 地面 / night 夜景暗色 / layers 图层(emoji+动画类+定位) / lineAnim 每句触发脉冲的图层序号 */
+const POEM_SCENES = {
+  "咏鹅": { bg:"linear-gradient(#CDEFFF,#EAFBF3)", ground:"ground-water", layers:[
+      {e:"🦢",cls:"a-float",st:"left:38%;top:26%;font-size:74px"},
+      {e:"🌊",cls:"a-wave",st:"left:12%;bottom:6%;font-size:40px"},
+      {e:"🌊",cls:"a-wave",st:"right:10%;bottom:8%;font-size:34px"},
+      {e:"💧",cls:"a-float",st:"left:20%;top:40%;font-size:24px"} ],
+    lineAnim:[[0],[0,3],[1,2],[1,2,3]] },
+  "静夜思": { bg:"linear-gradient(#1D2C50,#40548A)", night:1, ground:"ground-sand", layers:[
+      {e:"🌕",cls:"a-glow",st:"right:14%;top:12%;font-size:72px"},
+      {e:"✨",cls:"a-twinkle",st:"left:16%;top:16%;font-size:24px"},
+      {e:"⭐",cls:"a-twinkle",st:"left:38%;top:10%;font-size:18px"},
+      {e:"🛏️",cls:"a-float",st:"left:8%;bottom:8%;font-size:52px"},
+      {e:"🏠",cls:"a-float",st:"right:8%;bottom:10%;font-size:48px"} ],
+    lineAnim:[[0],[1,2],[0],[4]] },
+  "春晓": { bg:"linear-gradient(#FFEBD1,#FFF8EA)", ground:"ground-grass", layers:[
+      {e:"🌸",cls:"a-fall",st:"left:18%;top:4%;font-size:26px"},
+      {e:"🌸",cls:"a-fall",st:"left:52%;top:0;font-size:22px"},
+      {e:"🌸",cls:"a-fall",st:"right:22%;top:8%;font-size:28px"},
+      {e:"🐦",cls:"a-drift",st:"left:24%;top:30%;font-size:38px"},
+      {e:"🐦",cls:"a-drift",st:"right:26%;top:24%;font-size:34px"},
+      {e:"🌳",cls:"a-sway",st:"left:6%;bottom:4%;font-size:58px"} ],
+    lineAnim:[[5],[3,4],[2],[0,1,2]] },
+  "登鹳雀楼": { bg:"linear-gradient(#FFC98A,#FFEBC2)", ground:"ground-water", layers:[
+      {e:"☀️",cls:"a-float",st:"left:12%;top:14%;font-size:58px"},
+      {e:"⛰️",cls:"a-sway",st:"left:28%;bottom:8%;font-size:56px"},
+      {e:"🌊",cls:"a-wave",st:"left:14%;bottom:6%;font-size:30px"},
+      {e:"🏯",cls:"a-float",st:"right:12%;bottom:10%;font-size:66px"} ],
+    lineAnim:[[0,1],[2,3],[],[3]] },
+  "悯农（其二）": { bg:"linear-gradient(#FFDF9E,#FFF6DE)", ground:"ground-sand", layers:[
+      {e:"☀️",cls:"a-glow",st:"right:16%;top:10%;font-size:60px"},
+      {e:"🧑‍🌾",cls:"a-sway",st:"left:24%;bottom:8%;font-size:60px"},
+      {e:"🌾",cls:"a-sway",st:"right:24%;bottom:6%;font-size:44px"},
+      {e:"🌾",cls:"a-sway",st:"left:8%;bottom:5%;font-size:38px"},
+      {e:"🍚",cls:"a-float",st:"left:44%;top:22%;font-size:40px"} ],
+    lineAnim:[[0,1],[3],[4],[2,3]] },
+  "咏柳": { bg:"linear-gradient(#E2F6DC,#F8FFF1)", ground:"ground-grass", layers:[
+      {e:"🌳",cls:"a-sway",st:"left:10%;top:14%;font-size:84px"},
+      {e:"🍃",cls:"a-fall",st:"left:40%;top:4%;font-size:24px"},
+      {e:"🍃",cls:"a-fall",st:"right:30%;top:10%;font-size:22px"},
+      {e:"💨",cls:"a-drift",st:"right:12%;top:26%;font-size:36px"},
+      {e:"✂️",cls:"a-float",st:"right:26%;top:44%;font-size:34px"} ],
+    lineAnim:[[0],[1,2],[1,2,3],[4]] },
+  "绝句": { bg:"linear-gradient(#C8E7FF,#EFFAFF)", ground:"ground-snow", layers:[
+      {e:"🌳",cls:"a-sway",st:"left:8%;bottom:6%;font-size:60px"},
+      {e:"🐦",cls:"a-drift",st:"left:24%;bottom:22%;font-size:36px"},
+      {e:"🕊️",cls:"a-rise",st:"right:24%;top:34%;font-size:40px"},
+      {e:"🏔️",cls:"a-float",st:"right:8%;bottom:8%;font-size:62px"},
+      {e:"⛵",cls:"a-wave",st:"left:44%;bottom:4%;font-size:38px"} ],
+    lineAnim:[[0,1],[2],[3],[4]] },
+  "古朗月行（节选）": { bg:"linear-gradient(#2A3C66,#5C6FA4)", night:1, ground:"ground-snow", layers:[
+      {e:"🌕",cls:"a-glow",st:"left:32%;top:12%;font-size:96px"},
+      {e:"🪞",cls:"a-float",st:"right:18%;top:30%;font-size:40px"},
+      {e:"☁️",cls:"a-drift",st:"left:10%;top:30%;font-size:44px"},
+      {e:"✨",cls:"a-twinkle",st:"right:36%;top:10%;font-size:20px"} ],
+    lineAnim:[[0],[0],[1],[2,3]] },
+  "画": { bg:"linear-gradient(#F6EEDA,#FCF7EA)", ground:"ground-sand", layers:[
+      {e:"⛰️",cls:"",st:"left:12%;top:18%;font-size:60px"},
+      {e:"🏔️",cls:"",st:"right:14%;top:22%;font-size:50px"},
+      {e:"💧",cls:"",st:"left:40%;bottom:12%;font-size:36px"},
+      {e:"🌸",cls:"",st:"right:32%;bottom:16%;font-size:34px"},
+      {e:"🐦",cls:"",st:"left:18%;bottom:30%;font-size:36px"} ],
+    lineAnim:[[0,1],[2],[3],[4]] }
+};
+function poemScene(name){
+  if(POEM_SCENES[name]) return POEM_SCENES[name];
+  return { bg:"linear-gradient(#E8F1FA,#F7FBFF)", ground:"ground-grass", layers:[{e:"📜",cls:"a-float",st:"left:42%;top:24%;font-size:64px"}], lineAnim:[[],[],[],[]] };
+}
 /* 英文字母（字母 + 例词 + 配图emoji） */
 const ENG_LETTERS = [["A","apple","🍎"],["B","book","📕"],["C","cat","🐱"],["D","dog","🐶"],["E","egg","🥚"],["F","fish","🐟"],["G","grape","🍇"],["H","hat","🎩"],["I","ice cream","🍦"],["J","juice","🧃"],["K","kite","🪁"],["L","lion","🦁"],["M","milk","🥛"],["N","nose","👃"],["O","orange","🍊"],["P","pig","🐷"],["Q","queen","👑"],["R","rabbit","🐰"],["S","sun","☀️"],["T","tree","🌳"],["U","umbrella","☂️"],["V","violin","🎻"],["W","water","💧"],["X","box","📦"],["Y","yellow","💛"],["Z","zebra","🦓"]];
 /* 水果英文（词 + 配图emoji + 中文），例词均为通行日常用名 */
@@ -485,7 +610,8 @@ function renderCustomLinks(){
 }
 
 /* ================= 页面切换 ================= */
-function showView(name){
+function showView(name, arg){
+  if(name!=="poem") stopPoemRead();
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
   document.getElementById("home").style.display = "none";
   const v = document.getElementById("v-"+name);
@@ -494,6 +620,7 @@ function showView(name){
   if(name==="cards") renderCard();
   if(name==="pinyin") renderPinyin();
   if(name==="poems") renderPoems();
+  if(name==="poem"){ if(typeof arg==="number") curPoem = arg; renderPoem(); }
   if(name==="math") newMath();
   if(name==="english") renderEnglish();
   if(name==="qzw") renderQZW();
@@ -502,6 +629,7 @@ function showView(name){
   if(name==="stars") document.getElementById("starBig").textContent = stars;
 }
 function goHome(){
+  stopPoemRead();
   document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
   document.getElementById("home").style.display = "block";
   document.getElementById("backBtn").style.display = "none";
@@ -687,21 +815,113 @@ function qzwReadPage(){
   addStar(); popStar();
 }
 
-/* ================= 唐诗 ================= */
+/* ================= 唐诗（一诗一页 + 动画诵读） ================= */
 function renderPoems(){
   const box = document.getElementById("poemList");
   box.innerHTML = "";
+  const wrap = document.createElement("div");
+  wrap.className = "plist";
   poems.forEach((p,i)=>{
+    const sc = poemScene(p.t);
     const d = document.createElement("div");
-    d.className = "poem";
-    d.innerHTML = "<h3>"+p.t+"</h3><div class='author'>"+p.a+"</div><p>"+p.b.join("<br>")+"</p>" +
-      "<div class='pbtns'><button class='btn speak' onclick='readPoem("+i+")'>🔊 读给我听</button>" +
-      "<button class='btn next' onclick='recite("+i+")'>⭐ 我会背了</button></div>";
-    box.appendChild(d);
+    d.className = "pitem";
+    d.innerHTML = "<div class='pico' style='background:"+sc.bg+"'>"+sc.layers[0].e+"</div>" +
+      "<div class='pinfo'><h3>"+p.t+"</h3><div class='author'>"+p.a+"</div></div><div class='parrow'>▶</div>";
+    d.onclick = ()=>showView("poem", i);
+    wrap.appendChild(d);
+  });
+  box.appendChild(wrap);
+}
+
+let curPoem = 0, poemReading = false, poemLineTimer = null;
+function renderPoem(){
+  stopPoemRead();
+  const p = poems[curPoem];
+  if(!p) return;
+  const sc = poemScene(p.t);
+  const box = document.getElementById("poemDetail");
+  let layersHtml = "";
+  sc.layers.forEach((l,i)=>{
+    layersHtml += "<div class='layer "+l.cls+"' id='ply"+i+"' style='"+l.st+"'>"+l.e+"</div>";
+  });
+  if(sc.ground) layersHtml += "<div class='ground "+sc.ground+"'></div>";
+  let linesHtml = "";
+  p.b.forEach((line,i)=>{ linesHtml += "<div class='pline' id='pline"+i+"'>"+line+"</div>"; });
+  box.innerHTML =
+    "<div class='pscene"+(sc.night?" night":"")+"' style='background:"+sc.bg+"'>" +
+      "<div class='ptitlebar'><h2>"+p.t+"</h2><div class='pauthor'>"+p.a+"</div></div>" +
+      layersHtml +
+      "<button class='pplay' onclick='readPoemAnim()' title='诵读动画'>🔊</button>" +
+    "</div>" +
+    "<div class='ppanel'>" + linesHtml +
+      "<div class='pbtns2'><button class='btn speak' onclick='readPoemAnim()'>🔊 跟我一起读</button>" +
+      "<button class='btn next' onclick='recite()'>⭐ 我会背了</button></div>" +
+    "</div>";
+}
+function highlightLine(idx){
+  for(let i=0;i<8;i++){
+    const el = document.getElementById("pline"+i);
+    if(el) el.classList.toggle("on", i===idx);
+  }
+}
+function pulseScene(idx){
+  const sc = poemScene(poems[curPoem].t);
+  const arr = sc.lineAnim[idx] || [];
+  arr.forEach(li=>{
+    const el = document.getElementById("ply"+li);
+    if(!el) return;
+    el.classList.remove("pulse");
+    void el.offsetWidth;   /* 重启动画 */
+    el.classList.add("pulse");
   });
 }
-function readPoem(i){ const p = poems[i]; speak(p.t+"。"+p.a+"。"+p.b.join(" ")); }
-function recite(i){ speak("真棒！"); addStar(); popStar(); }
+/* 逐句诵读：标题→作者→诗句，每句开始时高亮该句并触发对应场景动画 */
+function readPoemAnim(){
+  stopPoemRead();
+  try{ speechSynthesis.cancel(); }catch(e){}
+  const p = poems[curPoem];
+  if(!p) return;
+  poemReading = true;
+  const parts = [{t:p.t, ln:-1},{t:p.a, ln:-1}].concat(p.b.map((l,i)=>({t:l, ln:i})));
+  let k = 0;
+  const next = ()=>{
+    if(!poemReading || k >= parts.length){ finishPoemRead(); return; }
+    const part = parts[k++];
+    highlightLine(part.ln);
+    if(part.ln >= 0) pulseScene(part.ln);
+    let moved = false, tmr = null;
+    const step = ()=>{
+      if(moved) return;
+      moved = true;
+      if(tmr){ clearTimeout(tmr); tmr = null; }
+      if(poemReading) poemLineTimer = setTimeout(next, 320);
+    };
+    try{
+      const u = new SpeechSynthesisUtterance(part.t);
+      u.lang = "zh-CN";
+      if(zhVoice) u.voice = zhVoice;
+      u.rate = 0.72; u.pitch = 1.15;
+      u.onend = step;
+      u.onerror = step;
+      /* 兜底：个别设备 onend 不触发，按句长给超时 */
+      tmr = setTimeout(step, Math.max(2600, part.t.length * 650));
+      speechSynthesis.speak(u);
+    }catch(e){ step(); }
+  };
+  next();
+}
+function finishPoemRead(){
+  poemReading = false;
+  if(poemLineTimer){ clearTimeout(poemLineTimer); poemLineTimer = null; }
+  highlightLine(-1);
+}
+function stopPoemRead(){
+  poemReading = false;
+  if(poemLineTimer){ clearTimeout(poemLineTimer); poemLineTimer = null; }
+  highlightLine(-1);
+  try{ speechSynthesis.cancel(); }catch(e){}
+}
+function recite(){ speak("真棒！"); addStar(); popStar(); }
 
 /* ================= 数学 ================= */
 let mRight = 0, mAns = 0;
