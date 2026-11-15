@@ -46,6 +46,18 @@ body { background:#F0F7FF; overflow:hidden; }
 .pcell { background:#fff; border-radius:18px; padding:18px 0; text-align:center; font-size:30px; font-weight:700; color:#31465A; cursor:pointer; border:2px solid transparent; }
 .pcell:active { transform:scale(.92); border-color:#4D9DE0; }
 .pcell small { display:block; font-size:12px; font-weight:400; color:#9AAFC2; margin-top:4px; }
+.etabs { display:flex; gap:8px; padding:0 20px 10px; flex-wrap:wrap; }
+.etab { border:2px solid #E3ECF4; background:#fff; border-radius:18px; padding:9px 16px; font-size:15px; font-weight:600; color:#5A7A96; cursor:pointer; }
+.etab.on { background:#4D9DE0; border-color:#4D9DE0; color:#fff; }
+.ecell { background:#fff; border-radius:18px; padding:12px 0; text-align:center; cursor:pointer; }
+.ecell:active { transform:scale(.92); }
+.ecell .emo { font-size:44px; line-height:1.2; }
+.ecell .wd { font-size:15px; font-weight:700; color:#31465A; margin-top:2px; }
+.ecell .cn { font-size:11px; color:#9AAFC2; }
+.ecell.num { font-size:24px; font-weight:700; color:#31465A; padding:14px 0; }
+.qgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(96px,1fr)); gap:10px; }
+.qcell { background:#FFFDF5; border:1.5px solid #F0E6CF; border-radius:14px; padding:16px 4px; text-align:center; font-family:"Kaiti SC","STKaiti","KaiTi",serif; font-size:24px; font-weight:700; color:#5C4A1E; letter-spacing:2px; cursor:pointer; }
+.qcell:active { transform:scale(.93); border-color:#E0B96A; }
 .poem { background:#fff; border-radius:24px; padding:26px; margin-bottom:16px; }
 .poem h3 { font-size:22px; color:#31465A; }
 .poem .author { font-size:14px; color:#9AAFC2; margin:6px 0 14px; }
@@ -98,7 +110,7 @@ body { background:#F0F7FF; overflow:hidden; }
 <body>
 <div id="app">
   <div id="topbar">
-    <div class="logo">纯净学习站<span>拼音 · 识字 · 唐诗 · 数学 · 英语</span></div>
+    <div class="logo">纯净学习站<span>拼音 · 识字 · 千字文 · 唐诗 · 数学 · 英语</span></div>
     <div style="display:flex;gap:10px;">
       <button id="backBtn" onclick="goHome()">‹ 首页</button>
       <button id="starBtn" onclick="openStars()">⭐ <span id="starCount">0</span></button>
@@ -111,9 +123,10 @@ body { background:#F0F7FF; overflow:hidden; }
       <div class="card" style="background:#E7F1FC" onclick="showView('pinyin')"><div class="ico">🅰️</div><div class="name">学拼音</div><div class="desc">声母韵母点读</div></div>
       <div class="card" style="background:#FDF3E7" onclick="showView('pinyin');setTimeout(switchPinyin,50)"><div class="ico">🔁</div><div class="name">整体认读</div><div class="desc">16个音节直呼</div></div>
       <div class="card" style="background:#FFF6E0" onclick="showView('cards')"><div class="ico">🔡</div><div class="name">识文断字</div><div class="desc">看大字 学组词</div></div>
+      <div class="card" style="background:#FBEAE0" onclick="showView('qzw')"><div class="ico">📖</div><div class="name">千字文</div><div class="desc">经典诵读 · 全文点读</div></div>
       <div class="card" style="background:#F3EBFC" onclick="showView('poems')"><div class="ico">📜</div><div class="name">读唐诗</div><div class="desc">经典 · 带朗读</div></div>
       <div class="card" style="background:#FFECEC" onclick="showView('math')"><div class="ico">🧮</div><div class="name">数学</div><div class="desc">10以内加减法</div></div>
-      <div class="card" style="background:#E9F7EC" onclick="showView('abc')"><div class="ico">🌍</div><div class="name">英语启蒙</div><div class="desc">字母单词点读</div></div>
+      <div class="card" style="background:#E9F7EC" onclick="showView('english')"><div class="ico">🌍</div><div class="name">英语启蒙</div><div class="desc">字母·数字·水果·动物</div></div>
       <div class="card" style="background:#E0F5F3" onclick="showView('habits')"><div class="ico">✅</div><div class="name">好习惯打卡</div><div class="desc">坚持就是胜利</div></div>
     </div>
     <div class="sec-title">🎵 儿歌 · 动画（正版资源）</div>
@@ -160,9 +173,29 @@ body { background:#F0F7FF; overflow:hidden; }
     </div>
   </div>
 
-  <div class="view" id="v-abc">
-    <div class="vhead"><div class="vt">🌍 英语启蒙</div><div class="vt" style="font-size:15px;color:#8AA2BC" onclick="switchEng()">点此切换 字母/日常用语</div></div>
-    <div class="vbody"><div class="pgrid" id="abcGrid"></div></div>
+  <div class="view" id="v-english">
+    <div class="vhead"><div class="vt">🌍 英语启蒙</div><div class="vt" style="font-size:14px;color:#8AA2BC">点图或文字可朗读</div></div>
+    <div class="etabs">
+      <button class="etab on" onclick="setEngTab(0)">字母ABC</button>
+      <button class="etab" onclick="setEngTab(1)">数字1-100</button>
+      <button class="etab" onclick="setEngTab(2)">水果</button>
+      <button class="etab" onclick="setEngTab(3)">动物</button>
+      <button class="etab" onclick="setEngTab(4)">日常用语</button>
+    </div>
+    <div class="vbody"><div class="pgrid" id="engGrid"></div></div>
+  </div>
+
+  <div class="view" id="v-qzw">
+    <div class="vhead"><div class="vt">📖 千字文</div><div class="vt" id="qzwPage" style="font-size:14px;color:#8AA2BC"></div></div>
+    <div class="vbody">
+      <div class="qgrid" id="qzwGrid"></div>
+      <div class="hint" style="text-align:center;margin:14px 0 4px">点任意一句可单独朗读 · 「读整页」连读</div>
+      <div class="row">
+        <button class="btn prev" onclick="qzwMove(-1)">‹ 上一页</button>
+        <button class="btn speak" onclick="qzwReadPage()">🔊 读整页</button>
+        <button class="btn next" onclick="qzwMove(1)">下一页 ›</button>
+      </div>
+    </div>
   </div>
 
   <div class="view" id="v-habits">
@@ -213,6 +246,17 @@ body { background:#F0F7FF; overflow:hidden; }
         <label>习惯名称</label><input id="inHabit" placeholder="例：饭前洗手">
         <div class="pbtns"><button class="btn next" onclick="addHabit()">添加习惯</button></div>
         <div id="habitAdmin" style="margin-top:10px"></div>
+      </div>
+      <div class="pgroup">
+        <h4>🔊 朗读声音选择</h4>
+        <label>中文朗读声音</label><select id="voiceZh" style="width:100%;padding:10px;font-size:16px;border:2px solid #EAF1F7;border-radius:12px;color:#31465A"></select>
+        <label>英文朗读声音</label><select id="voiceEn" style="width:100%;padding:10px;font-size:16px;border:2px solid #EAF1F7;border-radius:12px;color:#31465A"></select>
+        <div class="pbtns">
+          <button class="btn speak" onclick="saveVoices();speak('小朋友你好，我们一起学知识吧')">试听中文</button>
+          <button class="btn speak" onclick="saveVoices();speak('Hello, let us learn English together','en-US')">试听英文</button>
+          <button class="btn next" onclick="pickVoices();populateVoices()">刷新声音列表</button>
+        </div>
+        <div class="hint">想要更像童声的朗读：iPad 设置 → 辅助功能 → 朗读内容 → 声音 → 中文，下载名字带「增强版/高级版」的语音包（如「婷婷（增强版）」），下载完回到这里点「刷新声音列表」并选中它，音质会明显更好。当前选择会自动保存。</div>
       </div>
       <div class="pgroup">
         <h4>📦 备份 / 恢复</h4>
@@ -292,9 +336,15 @@ const DEF_POEMS = [
   {t:"古朗月行（节选）",a:"唐 · 李白",b:["小时不识月，","呼作白玉盘。","又疑瑶台镜，","飞在青云端。"]},
   {t:"画",a:"唐 · 王维（传，一说宋人作）",b:["远看山有色，","近听水无声。","春去花还在，","人来鸟不惊。"]}
 ];
-/* 英文字母 + 实际常用例词 */
-const ABC = [["A","apple 苹果"],["B","book 书"],["C","cat 猫"],["D","dog 狗"],["E","egg 鸡蛋"],["F","fish 鱼"],["G","girl 女孩"],["H","hand 手"],["I","ice 冰"],["J","juice 果汁"],["K","kite 风筝"],["L","lion 狮子"],["M","milk 牛奶"],["N","nose 鼻子"],["O","orange 橙子"],["P","pig 猪"],["Q","queen 女王"],["R","rain 雨"],["S","sun 太阳"],["T","tree 树"],["U","umbrella 伞"],["V","violin 小提琴"],["W","water 水"],["X","box 盒子"],["Y","yellow 黄色"],["Z","zoo 动物园"]];
+/* 英文字母（字母 + 例词 + 配图emoji） */
+const ENG_LETTERS = [["A","apple","🍎"],["B","book","📕"],["C","cat","🐱"],["D","dog","🐶"],["E","egg","🥚"],["F","fish","🐟"],["G","grape","🍇"],["H","hat","🎩"],["I","ice cream","🍦"],["J","juice","🧃"],["K","kite","🪁"],["L","lion","🦁"],["M","milk","🥛"],["N","nose","👃"],["O","orange","🍊"],["P","pig","🐷"],["Q","queen","👑"],["R","rabbit","🐰"],["S","sun","☀️"],["T","tree","🌳"],["U","umbrella","☂️"],["V","violin","🎻"],["W","water","💧"],["X","box","📦"],["Y","yellow","💛"],["Z","zebra","🦓"]];
+/* 水果英文（词 + 配图emoji + 中文），例词均为通行日常用名 */
+const FRUITS = [["apple","🍎","苹果"],["banana","🍌","香蕉"],["grape","🍇","葡萄"],["watermelon","🍉","西瓜"],["strawberry","🍓","草莓"],["pineapple","🍍","菠萝"],["peach","🍑","桃子"],["orange","🍊","橙子"],["lemon","🍋","柠檬"],["mango","🥭","芒果"],["pear","🍐","梨"],["cherry","🍒","樱桃"],["kiwi","🥝","猕猴桃"],["coconut","🥥","椰子"],["avocado","🥑","牛油果"]];
+/* 动物英文（词 + 配图emoji + 中文） */
+const ANIMALS = [["dog","🐶","小狗"],["cat","🐱","小猫"],["rabbit","🐰","兔子"],["panda","🐼","熊猫"],["tiger","🐯","老虎"],["lion","🦁","狮子"],["monkey","🐵","猴子"],["elephant","🐘","大象"],["pig","🐷","小猪"],["cow","🐮","奶牛"],["sheep","🐑","绵羊"],["horse","🐴","小马"],["duck","🦆","鸭子"],["chicken","🐔","小鸡"],["penguin","🐧","企鹅"],["frog","🐸","青蛙"],["bee","🐝","蜜蜂"],["butterfly","🦋","蝴蝶"],["turtle","🐢","乌龟"],["fish","🐠","金鱼"]];
 const ENG_SENT = [["Hello!","你好！"],["Thank you!","谢谢！"],["Good morning!","早上好！"],["Good night!","晚安！"],["I love you!","我爱你！"],["How are you?","你好吗？"],["Let's play!","一起玩吧！"],["Well done!","做得好！"]];
+/* 千字文全文（南朝梁 · 周兴嗣），通行版本，共250句 */
+const QZW = ["天地玄黄","宇宙洪荒","日月盈昃","辰宿列张","寒来暑往","秋收冬藏","闰余成岁","律吕调阳","云腾致雨","露结为霜","金生丽水","玉出昆冈","剑号巨阙","珠称夜光","果珍李柰","菜重芥姜","海咸河淡","鳞潜羽翔","龙师火帝","鸟官人皇","始制文字","乃服衣裳","推位让国","有虞陶唐","吊民伐罪","周发殷汤","坐朝问道","垂拱平章","爱育黎首","臣伏戎羌","遐迩一体","率宾归王","鸣凤在竹","白驹食场","化被草木","赖及万方","盖此身发","四大五常","恭惟鞠养","岂敢毁伤","女慕贞洁","男效才良","知过必改","得能莫忘","罔谈彼短","靡恃己长","信使可覆","器欲难量","墨悲丝染","诗赞羔羊","景行维贤","克念作圣","德建名立","形端表正","空谷传声","虚堂习听","祸因恶积","福缘善庆","尺璧非宝","寸阴是竞","资父事君","曰严与敬","孝当竭力","忠则尽命","临深履薄","夙兴温凊","似兰斯馨","如松之盛","川流不息","渊澄取映","容止若思","言辞安定","笃初诚美","慎终宜令","荣业所基","籍甚无竟","学优登仕","摄职从政","存以甘棠","去而益咏","乐殊贵贱","礼别尊卑","上和下睦","夫唱妇随","外受傅训","入奉母仪","诸姑伯叔","犹子比儿","孔怀兄弟","同气连枝","交友投分","切磨箴规","仁慈隐恻","造次弗离","节义廉退","颠沛匪亏","性静情逸","心动神疲","守真志满","逐物意移","坚持雅操","好爵自縻","都邑华夏","东西二京","背邙面洛","浮渭据泾","宫殿盘郁","楼观飞惊","图写禽兽","画彩仙灵","丙舍旁启","甲帐对楹","肆筵设席","鼓瑟吹笙","升阶纳陛","弁转疑星","右通广内","左达承明","既集坟典","亦聚群英","杜稿钟隶","漆书壁经","府罗将相","路侠槐卿","户封八县","家给千兵","高冠陪辇","驱毂振缨","世禄侈富","车驾肥轻","策功茂实","勒碑刻铭","磻溪伊尹","佐时阿衡","奄宅曲阜","微旦孰营","桓公匡合","济弱扶倾","绮回汉惠","说感武丁","俊乂密勿","多士寔宁","晋楚更霸","赵魏困横","假途灭虢","践土会盟","何遵约法","韩弊烦刑","起翦颇牧","用军最精","宣威沙漠","驰誉丹青","九州禹迹","百郡秦并","岳宗泰岱","禅主云亭","雁门紫塞","鸡田赤城","昆池碣石","巨野洞庭","旷远绵邈","岩岫杳冥","治本于农","务兹稼穑","俶载南亩","我艺黍稷","税熟贡新","劝赏黜陟","孟轲敦素","史鱼秉直","庶几中庸","劳谦谨敕","聆音察理","鉴貌辨色","贻厥嘉猷","勉其祗植","省躬讥诫","宠增抗极","殆辱近耻","林皋幸即","两疏见机","解组谁逼","索居闲处","沉默寂寥","求古寻论","散虑逍遥","欣奏累遣","戚谢欢招","渠荷的历","园莽抽条","枇杷晚翠","梧桐蚤凋","陈根委翳","落叶飘摇","游鹍独运","凌摩绛霄","耽读玩市","寓目囊箱","易輶攸畏","属耳垣墙","具膳餐饭","适口充肠","饱饫烹宰","饥厌糟糠","亲戚故旧","老少异粮","妾御绩纺","侍巾帷房","纨扇圆洁","银烛炜煌","昼眠夕寐","蓝笋象床","弦歌酒宴","接杯举觞","矫手顿足","悦豫且康","嫡后嗣续","祭祀蒸尝","稽颡再拜","悚惧恐惶","笺牒简要","顾答审详","骸垢想浴","执热愿凉","驴骡犊特","骇跃超骧","诛斩贼盗","捕获叛亡","布射僚丸","嵇琴阮啸","恬笔伦纸","钧巧任钓","释纷利俗","竝皆佳妙","毛施淑姿","工颦妍笑","年矢每催","曦晖朗曜","璇玑悬斡","晦魄环照","指薪修祜","永绥吉劭","矩步引领","俯仰廊庙","束带矜庄","徘徊瞻眺","孤陋寡闻","愚蒙等诮","谓语助者","焉哉乎也"];
 const DEF_HABITS = ["早晚刷牙","自己穿衣","收拾玩具","户外运动一小时"];
 
 /* 已核实的正版/官方资源（核实日期 2026-11-15） */
@@ -326,10 +376,46 @@ function speak(text, lang){
     speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text);
     u.lang = lang || "zh-CN";
-    u.rate = 0.75;
+    const v = /^en/i.test(u.lang) ? enVoice : zhVoice;
+    if(v) u.voice = v;
+    u.rate = 0.8;   /* 稍慢，孩子听得清 */
+    u.pitch = 1.15; /* 音调略高，更柔和亲切 */
     speechSynthesis.speak(u);
   }catch(e){}
 }
+/* 儿童声音引擎：自动挑选系统里最柔和亲切的语音，家长模式可更换 */
+let zhVoice = null, enVoice = null;
+function pickVoices(){
+  try{
+    const vs = speechSynthesis.getVoices();
+    const zh = vs.filter(v=>/^zh|^cmn/i.test(v.lang));
+    const en = vs.filter(v=>/^en/i.test(v.lang));
+    const sz = S.get("vzh",""), se = S.get("ven","");
+    zhVoice = zh.find(v=>v.name===sz) || zh.find(v=>/婷婷|Tingting|Xiaoxiao|晓晓|Meijia|Google/i.test(v.name)) || zh[0] || null;
+    enVoice = en.find(v=>v.name===se) || en.find(v=>/Samantha|Ava|Aria|Zira|Google US/i.test(v.name)) || en[0] || null;
+  }catch(e){}
+}
+function populateVoices(){
+  const zs = document.getElementById("voiceZh"), es = document.getElementById("voiceEn");
+  if(!zs || !es) return;
+  try{
+    const vs = speechSynthesis.getVoices();
+    const zh = vs.filter(v=>/^zh|^cmn/i.test(v.lang)), en = vs.filter(v=>/^en/i.test(v.lang));
+    zs.innerHTML = zh.length ? zh.map(v=>"<option value=\""+v.name+"\">"+v.name+"（"+v.lang+"）</option>").join("") : "<option>未检测到中文语音</option>";
+    es.innerHTML = en.length ? en.map(v=>"<option value=\""+v.name+"\">"+v.name+"（"+v.lang+"）</option>").join("") : "<option>未检测到英文语音</option>";
+    if(zhVoice && zh.some(v=>v.name===zhVoice.name)) zs.value = zhVoice.name;
+    if(enVoice && en.some(v=>v.name===enVoice.name)) es.value = enVoice.name;
+  }catch(e){}
+}
+function saveVoices(){
+  const zs = document.getElementById("voiceZh"), es = document.getElementById("voiceEn");
+  if(zs && zs.value) S.set("vzh", zs.value);
+  if(es && es.value) S.set("ven", es.value);
+  pickVoices();
+  toast("声音已保存");
+}
+if("onvoiceschanged" in speechSynthesis) speechSynthesis.onvoiceschanged = pickVoices;
+pickVoices();
 
 /* ================= 资源列表 ================= */
 function renderResources(){
@@ -374,7 +460,8 @@ function showView(name){
   if(name==="pinyin") renderPinyin();
   if(name==="poems") renderPoems();
   if(name==="math") newMath();
-  if(name==="abc") renderABC();
+  if(name==="english") renderEnglish();
+  if(name==="qzw") renderQZW();
   if(name==="habits") renderHabits();
   if(name==="stars") document.getElementById("starBig").textContent = stars;
 }
@@ -418,17 +505,43 @@ function renderPinyin(){
 }
 function switchPinyin(){ pyMode = (pyMode+1)%3; renderPinyin(); }
 
-/* ================= 英语启蒙 ================= */
-let engMode = 0; /* 0=字母 1=日常用语 */
-function renderABC(){
-  const g = document.getElementById("abcGrid");
+/* ================= 英语启蒙（字母/数字/水果/动物/用语） ================= */
+let engTab = 0;
+const ENG_TABS = ["字母ABC","数字1-100","水果","动物","日常用语"];
+function renderEnglish(){
+  document.querySelectorAll(".etab").forEach((b,i)=>b.classList.toggle("on", i===engTab));
+  const g = document.getElementById("engGrid");
   g.innerHTML = "";
-  if(engMode===0){
-    ABC.forEach(([L,w])=>{
+  if(engTab===0){
+    ENG_LETTERS.forEach(([L,w,e])=>{
       const d = document.createElement("div");
-      d.className = "pcell";
-      d.innerHTML = L + "<small>" + w + "</small>";
-      d.onclick = ()=>speak(w.split(" ")[0], "en-US");
+      d.className = "ecell";
+      d.innerHTML = "<div class='emo'>"+e+"</div><div class='wd'>"+L+"</div><div class='cn'>"+w+"</div>";
+      d.onclick = ()=>speak(L + ". " + w, "en-US");
+      g.appendChild(d);
+    });
+  } else if(engTab===1){
+    for(let n=1;n<=100;n++){
+      const d = document.createElement("div");
+      d.className = "ecell num";
+      d.textContent = n;
+      d.onclick = ()=>speak(String(n), "en-US");
+      g.appendChild(d);
+    }
+  } else if(engTab===2){
+    FRUITS.forEach(([w,e,c])=>{
+      const d = document.createElement("div");
+      d.className = "ecell";
+      d.innerHTML = "<div class='emo'>"+e+"</div><div class='wd'>"+w+"</div><div class='cn'>"+c+"</div>";
+      d.onclick = ()=>speak(w, "en-US");
+      g.appendChild(d);
+    });
+  } else if(engTab===3){
+    ANIMALS.forEach(([w,e,c])=>{
+      const d = document.createElement("div");
+      d.className = "ecell";
+      d.innerHTML = "<div class='emo'>"+e+"</div><div class='wd'>"+w+"</div><div class='cn'>"+c+"</div>";
+      d.onclick = ()=>speak(w, "en-US");
       g.appendChild(d);
     });
   } else {
@@ -442,7 +555,37 @@ function renderABC(){
     });
   }
 }
-function switchEng(){ engMode = 1-engMode; renderABC(); }
+function setEngTab(i){ engTab = i; renderEnglish(); }
+
+/* ================= 千字文 ================= */
+const QZW_PER = 8; /* 每页 8 句 */
+let qzwPage = 0;
+function renderQZW(){
+  const g = document.getElementById("qzwGrid");
+  const total = Math.ceil(QZW.length / QZW_PER);
+  const start = qzwPage * QZW_PER;
+  const lines = QZW.slice(start, start + QZW_PER);
+  document.getElementById("qzwPage").textContent = "第 " + (qzwPage+1) + " / " + total + " 页";
+  g.innerHTML = "";
+  lines.forEach(l=>{
+    const d = document.createElement("div");
+    d.className = "qcell";
+    d.textContent = l;
+    d.onclick = ()=>speak(l);
+    g.appendChild(d);
+  });
+  document.getElementById("qzwGrid").scrollIntoView;
+}
+function qzwMove(d){
+  const total = Math.ceil(QZW.length / QZW_PER);
+  qzwPage = Math.max(0, Math.min(total-1, qzwPage + d));
+  renderQZW();
+}
+function qzwReadPage(){
+  const s = qzwPage * QZW_PER;
+  speak(QZW.slice(s, s + QZW_PER).join("，"));
+  addStar(); popStar();
+}
 
 /* ================= 唐诗 ================= */
 function renderPoems(){
@@ -552,6 +695,7 @@ function toast(msg){
   setTimeout(()=>t.style.display="none", 1800);
 }
 function renderParent(){
+  pickVoices(); populateVoices();
   const fill = (id, arr, fmt) => {
     const el = document.getElementById(id);
     el.innerHTML = "";
