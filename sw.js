@@ -1,4 +1,4 @@
-const CACHE = "kidspurelearn-v6";
+const CACHE = "kidspurelearn-v7";
 const ASSETS = [
   "./",
   "./index.html",
